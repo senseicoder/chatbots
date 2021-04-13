@@ -9,6 +9,10 @@ from flask import Flask, request, json
 app = Flask(__name__)
 rexec2 = re.compile(r'^ec2 ls$')
 
+@app.route('/test', methods=['GET'])
+def on_event_test():
+    return 'ok'
+
 @app.route('/', methods=['POST'])
 def on_event():
   """Handles an event from Google Chat."""

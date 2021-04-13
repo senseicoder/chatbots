@@ -21,7 +21,11 @@ def sendmsg(event, msg, classe):
 
 app = Flask(__name__)
 
-@app.route('/simple', methods=['POST', 'GET'])
+@app.route('/test', methods=['GET'])
+def on_event_test():
+    return 'ok'
+
+@app.route('/simple', methods=['POST'])
 def on_event():
   """Handles an event from Google Chat."""
   #return jsonify(request.form.to_dict(flat=False))
