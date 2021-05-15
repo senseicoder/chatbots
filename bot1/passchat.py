@@ -10,8 +10,14 @@ import os, sys, getopt
 import re
 import sys
 
+import yaml
+config = yaml.safe_load(open("config.dev.yml"))
+print(yaml.dump(config))
+
 import log
-import chatbotlib
+log.init(config['daemon']['pid'], config['daemon']['log'])
+import chatbot
+chatbot.init(config['googlechat']['authfile'])
 
 app = Flask(__name__)
 
@@ -22,15 +28,21 @@ def on_event_test():
 @app.route('/simple', methods=['POST'])
 def on_event():
   data = request.get_json(force=True)
-  addlog("envoi " + data['msg'])
-  sendmsg(data['event'], data['msg'], data['classe'])
+  log.add("envoi " + data['msg'])
+  chatbot.sendmsg(data['event'], data['msg'], data['classe'])
   return 'sent'
 
 def main():
-  log.addlog("demarrage avec toutes les infos de la conf")
-  app.run(host='0.0.0.0', port=8001, debug=True)
-  log.addlog("apres flask")
-  #, ssl_context=('/etc/letsencrypt/live/bots.plcoder.net/fullchain.pem', '/etc/letsencrypt/archive/bots.plcoder.net/privkey1.pem')
+  global config
+
+  log.add("demarrage avec toutes les infos de la conf")
+
+  ssl_context = None
+  if config['host']['ssl']['active']:
+    log.add('ssl active')
+    ssl_context = (config['host']['ssl']['chain'], config['host']['ssl']['cert'])
+
+  app.run(host=config['host']['name'], port=config['host']['port'], debug=config['host']['debug'], ssl_context=ssl_context)
 
 if __name__ == '__main__':
   main()

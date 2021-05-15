@@ -1,0 +1,18 @@
+---
+
+daemon:
+  pid: "/var/run/passchat.pid"
+  log: "/var/log/passchat.log"
+
+googlechat:
+  authfile: '/space/etc/google_api/chatbot1.json'
+  
+host:
+  name: '0.0.0.0'
+  port: 8001
+  debug: True
+  ssl: 
+    active: False
+    chain: '/etc/letsencrypt/live/bots.plcoder.net/fullchain.pem'
+    cert: '/etc/letsencrypt/archive/bots.plcoder.net/privkey1.pem'
+
