@@ -13,8 +13,9 @@ from httplib2 import Http
 from oauth2client.service_account import ServiceAccountCredentials
 from apiclient.discovery import build
 
+from datetime import datetime
 import logging
-from daemonize import Daemonize
+#from daemonize import Daemonize
 
 def sendmsg(event, msg, classe):
   scopes = 'https://www.googleapis.com/auth/chat.bot'
@@ -25,9 +26,6 @@ def sendmsg(event, msg, classe):
     body={'text': '('+event+') '+msg}).execute()
   print(resp)
 
-def addlog(line):
-  logger.debug(datetime.now().strftime('%Y-%m-%d %H:%M:%s') + " " + line)
-
 pid = "/var/run/passchat.pid"
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -36,6 +34,12 @@ fh = logging.FileHandler("/var/log/passchat.log", "a")
 fh.setLevel(logging.DEBUG)
 logger.addHandler(fh)
 keep_fds = [fh.stream.fileno()]
+
+def addlog(line):
+  global logger
+  logger.debug(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + " " + line)
+
+addlog("test");
 
 app = Flask(__name__)
 
@@ -51,10 +55,11 @@ def on_event():
   return 'sent'
 
 def main():
-  addlog("demarrage avec toutes les infos de la conf")
+  logger.debug("demarrage avec toutes les infos de la conf")
   app.run(host='0.0.0.0', port=8001, debug=True)
-  addlog("apres flask")
+  logger.debug("apres flask")
   #, ssl_context=('/etc/letsencrypt/live/bots.plcoder.net/fullchain.pem', '/etc/letsencrypt/archive/bots.plcoder.net/privkey1.pem')
 
-daemon = Daemonize(app="passchat", pid=pid, action=main, keep_fds=keep_fds)
-daemon.start()
+#daemon = Daemonize(app="passchat", pid=pid, action=main, keep_fds=keep_fds)
+#daemon.start()
+main
