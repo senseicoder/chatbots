@@ -12,7 +12,7 @@ import sys
 
 import yaml
 config = yaml.safe_load(open("config.dev.yml"))
-print(yaml.dump(config))
+#print(yaml.dump(config))
 
 import log
 log.init(config['daemon']['pid'], config['daemon']['log'])
@@ -29,7 +29,7 @@ def on_event_test():
 def on_event():
   data = request.get_json(force=True)
   log.add("envoi " + data['msg'])
-  chatbot.sendmsg(data['event'], data['msg'], data['classe'])
+  chatbot.sendmsg('spaces/sCD2iwAAAAE', data['event'], data['msg'], data['classe'])
   return 'sent'
 
 def main():

@@ -2,15 +2,17 @@
 """Example bot that returns a synchronous response."""
 
 import sys
-from httplib2 import Http
-from oauth2client.service_account import ServiceAccountCredentials
-from apiclient.discovery import build
-scopes = 'https://www.googleapis.com/auth/chat.bot'
-credentials = ServiceAccountCredentials.from_json_keyfile_name(
-            '/space/etc/google_api/chatbot1.json', scopes)
-chat = build('chat', 'v1', http=credentials.authorize(Http()))
-resp = chat.spaces().messages().create(
-            parent=sys.argv[1], # use your space here
-                body={'text': sys.argv[2]}).execute()
-print(resp)
 
+import yaml
+config = yaml.safe_load(open("config.dev.yml"))
+#print(yaml.dump(config))
+
+import log
+log.init(config['daemon']['pid'], config['daemon']['log'])
+
+import chatbot
+chatbot.init(config['googlechat']['authfile'])
+
+log.add("envoi " + sys.argv[2])
+resp = chatbot.sendmsg(sys.argv[1], 'CRITICAL', sys.argv[2], 'perso')
+print(resp)
