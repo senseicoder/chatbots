@@ -29,7 +29,8 @@ def on_event_test():
 def on_event():
   data = request.get_json(force=True)
   log.add("envoi " + data['msg'])
-  chatbot.sendmsg('spaces/sCD2iwAAAAE', data['event'], data['msg'], data['classe'])
+  resp = chatbot.sendmsg('spaces/sCD2iwAAAAE', data['event'], data['msg'], data['classe'])
+  print(resp)
   return 'sent'
 
 def main():
