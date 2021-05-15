@@ -6,7 +6,6 @@ authfile = None
 
 def init(authfile_):
 	global authfile
-
 	authfile = authfile_
 
 def sendmsg(event, msg, classe):
