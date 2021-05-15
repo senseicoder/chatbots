@@ -39,8 +39,6 @@ def addlog(line):
   global logger
   logger.debug(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + " " + line)
 
-addlog("test");
-
 app = Flask(__name__)
 
 @app.route('/test', methods=['GET'])
@@ -55,11 +53,12 @@ def on_event():
   return 'sent'
 
 def main():
-  logger.debug("demarrage avec toutes les infos de la conf")
+  addlog("demarrage avec toutes les infos de la conf")
   app.run(host='0.0.0.0', port=8001, debug=True)
-  logger.debug("apres flask")
+  addlog("apres flask")
   #, ssl_context=('/etc/letsencrypt/live/bots.plcoder.net/fullchain.pem', '/etc/letsencrypt/archive/bots.plcoder.net/privkey1.pem')
 
-#daemon = Daemonize(app="passchat", pid=pid, action=main, keep_fds=keep_fds)
-#daemon.start()
-main
+if __name__ == '__main__':
+  #daemon = Daemonize(app="passchat", pid=pid, action=main, keep_fds=keep_fds)
+  #daemon.start()
+  main()
