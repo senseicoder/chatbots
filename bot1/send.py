@@ -3,6 +3,11 @@
 
 import sys
 
+if len(sys.argv) < 3:
+    sys.exit(0)
+if not sys.argv[2] or not sys.argv[1]:
+    sys.exit(0)
+
 import yaml
 config = yaml.safe_load(open("config.dev.yml"))
 #print(yaml.dump(config))
